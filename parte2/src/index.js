@@ -7,15 +7,13 @@ app.use(express.json());
 const projects = [];
 
 app.get("/projects", (request, response) => {
-  const { title, owner } = request.query;
-  console.log(title, owner);
-  return response.json(["Projeto 1", "Projeto 2", "Projeto 3", "Projeto 4"]);
+  return response.json(projects);
 });
 
 app.post("/projects", (request, response) => {
-  const body = request.body;
+  const { title, owner, id } = request.body;
 
-  console.log(body);
+  const project = {}
   return response.json(["Projeto 5"]);
 });
 
