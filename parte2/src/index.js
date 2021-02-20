@@ -13,25 +13,41 @@ app.get("/projects", (request, response) => {
 app.post("/projects", (request, response) => {
   const { title, owner, id } = request.body;
 
-  const project = {}
-  return response.json(["Projeto 5"]);
+  const project = { title, owner, id };
+
+  projects.push(project);
+  return response.json(project);
 });
 
 app.put("/projects/:id", (request, response) => {
   const { id } = request.params;
-  console.log(`project ${id} is changed`);
-  return response.json({
-    before: "Projeto 5",
-    after: "Projeto 5...",
-  });
+  const { title, owner } = request.body;
+
+  const projectIndex = projects.findIndex((project) => project.id == id);
+
+  if (projectIndex < 0) {
+    return response.status(400).json({ error: "Project not found..." });
+  }
+
+  const project = { id, title, owner };
+
+  projects[projectIndex] = project;
+
+  return response.json(project);
 });
 
 app.delete("/projects/:id", (request, response) => {
   const { id } = request.params;
-  console.log(`project ${id} is deleted`);
-  return response.json({
-    deleted: ["Projeto 1", "Projeto 2", "Projeto 3", "Projeto 4"],
-  });
+
+  const projectIndex = projects.findIndex((project) => project.id == id);
+
+  if (projectIndex < 0) {
+    return response.status(400).json({ error: "Project not found..." });
+  }
+
+  projects.splice(projectIndex, 1);
+
+  return response.status(200).json({ message: "Deleted" });
 });
 
 app.listen(3000, () => {
